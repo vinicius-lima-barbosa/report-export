@@ -12,7 +12,7 @@ export interface ReportJobDto {
   };
 }
 
-const REPORT_QUEUE_NAME = "report-queue";
+export const REPORT_QUEUE_NAME = "report-queue";
 
 export const reportQueue = new Queue<ReportJobDto>(REPORT_QUEUE_NAME, {
   connection: redisConnectionOptions,

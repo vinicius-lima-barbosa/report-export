@@ -1,4 +1,4 @@
-import { reportQueue } from "@/infra/queues/report-queue";
+import { reportQueue } from "@/infra/queues/report.queue";
 import { successResponse } from "@/shared/utils/response";
 import { NextFunction, Request, Response } from "express";
 import { CreateReportDto } from "./report.schema";

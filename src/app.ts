@@ -8,6 +8,8 @@ import helmet from "helmet";
 import { errorMiddleware } from "./shared/middlewares/error.middleware.js";
 import { successResponse } from "./shared/utils/response.js";
 
+import "@/infra/workers/report.worker.js";
+
 const app: Express = express();
 
 app.set("trust proxy", 1);
