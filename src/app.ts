@@ -9,10 +9,16 @@ import { errorMiddleware } from "./shared/middlewares/error.middleware.js";
 import { successResponse } from "./shared/utils/response.js";
 
 import "@/infra/workers/report.worker.js";
+import { createServer } from "http";
+import { setupWebSocket } from "./config/ws.js";
 
 const app: Express = express();
 
 app.set("trust proxy", 1);
+
+const server = createServer(app);
+
+setupWebSocket(server);
 
 // ─── Security ────────────────────────────────────────────────────────────────
 app.use(helmet());
@@ -64,4 +70,4 @@ app.use((_req, res) => {
 // ─── Global error handler ─────────────────────────────────────────────────────
 app.use(errorMiddleware);
 
-export default app;
+export default server;

@@ -26,7 +26,7 @@ export const reportHttp = {
       });
 
       res
-        .status(201)
+        .status(202)
         .json(
           successResponse(
             { reportId, status: "PENDING" },
