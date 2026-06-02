@@ -7,7 +7,10 @@
     "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "declaration": true,
     "skipLibCheck": true,
+    "sourceMap": true,
     "paths": {
       "@/*": ["./src/*"],
       "@config/*": ["./src/config/*"],

@@ -1,6 +1,8 @@
 import { logger } from "@shared/utils/logger.js";
 import type { NextFunction, Request, Response } from "express";
 import { AppError } from "../errors/app-error.js";
+import { ValidationError } from "../errors/http-error.js";
+import { errorResponse } from "../utils/response.js";
 
 export function errorMiddleware(
   err: Error,
@@ -20,11 +22,15 @@ export function errorMiddleware(
     );
   }
 
+  if (err instanceof ValidationError) {
+    res
+      .status(err.statusCode)
+      .json(errorResponse(err.message, err.statusCode, err.errors));
+    return;
+  }
+
   if (err instanceof AppError) {
-    res.status(err.statusCode).json({
-      statusCode: err.statusCode,
-      message: err.message,
-    });
+    res.status(err.statusCode).json(errorResponse(err.message, err.statusCode));
     return;
   }
 

@@ -1,4 +1,5 @@
 import { env } from "@/config/env.js";
+import reportRoutes from "@/modules/report/report.route.js";
 import compression from "compression";
 import cors from "cors";
 import express, { Express } from "express";
@@ -49,6 +50,9 @@ app.get("/health", (_req, res) => {
     ),
   );
 });
+
+// ─── Routes ───────────────────────────────────────────────────────────────────
+app.use("/reports", reportRoutes);
 
 // ─── 404 handler ──────────────────────────────────────────────────────────────
 app.use((_req, res) => {
