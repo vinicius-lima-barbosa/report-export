@@ -8,9 +8,8 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 export const reportWorker = new Worker<ReportJobDto>(
   REPORT_QUEUE_NAME,
   async (job: Job<ReportJobDto>) => {
-    const { reportId, userId } = job.data;
+    const { reportId } = job.data;
 
-    // Simulate report generation time
     const totalSteps = 5;
     for (let step = 1; step <= totalSteps; step++) {
       const progress = step * 20;
