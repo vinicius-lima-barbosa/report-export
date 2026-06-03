@@ -6,5 +6,6 @@ import { createReportSchema } from "./report.schema";
 const router: Router = Router();
 
 router.post("/", validateBody(createReportSchema), reportHttp.createReport);
+router.post("/:id/download", reportHttp.downloadReport);
 
 export default router;

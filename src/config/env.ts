@@ -16,6 +16,10 @@ const envSchema = z.object({
   DB_NAME: z.string().default("report_export_db"),
   DB_PASSWORD: z.string().default("postgres"),
   DB_PORT: z.string().default("5432"),
+  SUPABASE_URL: z.url().nonempty("SUPABASE_URL is required"),
+  SUPABASE_SERVICE_ROLE_KEY: z
+    .string()
+    .nonempty("SUPABASE_SERVICE_ROLE_KEY is required"),
 });
 
 const parsed = envSchema.safeParse(process.env);

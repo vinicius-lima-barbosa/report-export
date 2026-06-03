@@ -1,6 +1,6 @@
 {
   "name": "report-export",
-  "version": "1.1.1",
+  "version": "1.2.1",
   "description": "A asynchronous report export in background with progress status and download link.",
   "type": "module",
   "scripts": {
