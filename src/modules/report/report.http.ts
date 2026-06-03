@@ -1,3 +1,4 @@
+import { db } from "@/config/database";
 import { reportQueue } from "@/infra/queues/report.queue";
 import { successResponse } from "@/shared/utils/response";
 import { NextFunction, Request, Response } from "express";
@@ -13,7 +14,17 @@ export const reportHttp = {
       const body = req.body as CreateReportDto;
       // Fake IDs for demonstration purposes
       const fakeUserId = "user_abc123";
-      const reportId = `report_${Date.now()}`;
+
+      const query = `
+        INSERT INTO reports (user_id, status, progress)
+        VALUES ($1, 'PENDING', 0)
+        RETURNING id, status
+      `;
+
+      const dbResult = await db.query(query, [fakeUserId]);
+      const createdReport = dbResult.rows[0];
+
+      const reportId = createdReport.id;
 
       await reportQueue.add("generate-excel", {
         reportId,
@@ -29,7 +40,7 @@ export const reportHttp = {
         .status(202)
         .json(
           successResponse(
-            { reportId, status: "PENDING" },
+            { reportId, status: createdReport.status },
             "Report generation job created successfully",
           ),
         );

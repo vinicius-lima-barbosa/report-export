@@ -1,3 +1,4 @@
+import { db } from "@/config/database";
 import { redisClient, redisConnectionOptions } from "@/config/redis";
 import { logger } from "@/shared/utils/logger";
 import { Job, Worker } from "bullmq";
@@ -27,7 +28,16 @@ export const reportWorker = new Worker<ReportJobDto>(
       );
     }
 
+    // Fale variables for demonstration purposes
+    const fakeStoragePath = `reports/user_abc123/${reportId}.csv`;
     const fakeDownloadUrl = `https://exemplo.supabase.co/storage/v1/object/authenticated/reports/${reportId}.csv`;
+
+    await db.query(
+      `
+        UPDATE reports SET status = 'COMPLETED', storage_path = $1, updated_at = NOW() WHERE id = $2
+      `,
+      [fakeStoragePath, reportId],
+    );
 
     await redisClient.publish(
       "report_updates",
@@ -45,6 +55,7 @@ export const reportWorker = new Worker<ReportJobDto>(
   },
   {
     connection: redisConnectionOptions,
+    concurrency: 2,
   },
 );
 
@@ -54,6 +65,27 @@ reportWorker.on("completed", (job, result) => {
   );
 });
 
-reportWorker.on("failed", (job, err) => {
+reportWorker.on("failed", async (job, err) => {
   logger.error(`❌ [Worker] Job [${job?.id}] failed. Error: ${err.message}`);
+
+  if (job) {
+    const { reportId } = job.data;
+
+    await db.query(
+      `
+        UPDATE reports SET status = 'FAILED', error_message = $1, updated_at = NOW() WHERE id = $2
+      `,
+      [err.message, reportId],
+    );
+
+    await redisClient.publish(
+      "report_updates",
+      JSON.stringify({
+        reportId,
+        status: "FAILED",
+        progress: job.progress,
+        error: err.message,
+      }),
+    );
+  }
 });
