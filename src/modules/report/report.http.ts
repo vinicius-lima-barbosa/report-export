@@ -6,6 +6,24 @@ import { NextFunction, Request, Response } from "express";
 import { CreateReportDto } from "./report.schema";
 
 export const reportHttp = {
+  async getReports(
+    _req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const fakeUserId = "user_abc123";
+      const query = `SELECT * FROM reports WHERE user_id = $1`;
+      const dbResult = await db.query(query, [fakeUserId]);
+
+      res
+        .status(200)
+        .json(successResponse(dbResult.rows, "Reports retrieved successfully"));
+    } catch (error) {
+      next(error);
+    }
+  },
+
   async createReport(
     req: Request,
     res: Response,
