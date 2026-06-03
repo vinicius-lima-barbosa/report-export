@@ -62,7 +62,7 @@ export function setupWebSocket(server: HttpServer) {
 
   redisSubscriber.on("message", (channel, message) => {
     if (channel === "report_updates") {
-      const { reportId, status, progress, downloadUrl } = JSON.parse(message);
+      const { reportId, status, progress } = JSON.parse(message);
 
       const clients = reportSubscription.get(reportId);
 
@@ -71,7 +71,6 @@ export function setupWebSocket(server: HttpServer) {
           type: "REPORT_PROGRESS",
           status,
           progress,
-          downloadUrl,
         });
 
         clients.forEach((client) => {
