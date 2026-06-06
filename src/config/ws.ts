@@ -3,11 +3,10 @@ import { Server as HttpServer } from "http";
 import Redis from "ioredis";
 import { WebSocket, WebSocketServer } from "ws";
 import { env } from "./env";
-``;
 
 const reportSubscription = new Map<string, Set<WebSocket>>();
 
-export function setupWebSocket(server: HttpServer) {
+export function setupWebSocket(server: HttpServer): WebSocketServer {
   const wss = new WebSocketServer({ server });
 
   wss.on("connection", (ws: WebSocket) => {
@@ -81,4 +80,6 @@ export function setupWebSocket(server: HttpServer) {
       }
     }
   });
+
+  return wss;
 }

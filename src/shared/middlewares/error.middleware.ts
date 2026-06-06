@@ -1,8 +1,8 @@
-import { logger } from "@shared/utils/logger.js";
+import { logger } from "@shared/utils/logger";
 import type { NextFunction, Request, Response } from "express";
-import { AppError } from "../errors/app-error.js";
-import { ValidationError } from "../errors/http-error.js";
-import { errorResponse } from "../utils/response.js";
+import { AppError } from "../errors/app-error";
+import { ValidationError } from "../errors/http-error";
+import { errorResponse } from "../utils/response";
 
 export function errorMiddleware(
   err: Error,

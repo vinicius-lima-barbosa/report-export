@@ -1,12 +1,12 @@
-import { env } from "@/config/env.js";
-import reportRoutes from "@/modules/report/report.route.js";
+import { env } from "@/config/env";
+import reportRoutes from "@/modules/report/report.route";
 import compression from "compression";
 import cors from "cors";
 import express, { Express } from "express";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
-import { errorMiddleware } from "./shared/middlewares/error.middleware.js";
-import { successResponse } from "./shared/utils/response.js";
+import { errorMiddleware } from "./shared/middlewares/error.middleware";
+import { successResponse } from "./shared/utils/response";
 
 import "@/infra/workers/report.worker.js";
 import { createServer } from "http";
@@ -18,7 +18,7 @@ app.set("trust proxy", 1);
 
 const server = createServer(app);
 
-setupWebSocket(server);
+export const wss = setupWebSocket(server);
 
 // ─── Security ────────────────────────────────────────────────────────────────
 app.use(helmet());
